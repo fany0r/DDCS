@@ -2,7 +2,7 @@
 
 DDCS，全称Docker Desktop Chinese Script，即Docker汉化脚本。
 
-MAC版本请切换到MAC分支。
+~~MAC版本请切换到MAC分支。~~
 
 <big>**你可以在这个仓库找到各个版本的汉化包：【 https://github.com/asxez/DockerDesktop-CN 】**</big>
 
@@ -10,6 +10,7 @@ MAC版本请切换到MAC分支。
 汉化过程仅需13s（20颗cpu核心）即可完成（具体耗时以运行结果为准）。
 
 运行以下代码即可查看核心数：
+
 ```python
 import multiprocessing
 cpu_count = multiprocessing.cpu_count()
@@ -17,12 +18,24 @@ print(cpu_count)
 ```
 
 ## 使用方法
-下载源码，管理员权限启动终端并进入到源码根目录，使用以下命令即可：
-```bash
-python ddcs.py
-```
 
-注意：请务必使用管理员权限启动终端。
+> [!NOTE]
+> 需要已安装 python3、Nodejs（asar）
+> 
+
+1. 关闭Docker Desktop
+2. 下载源码，~~管理员权限~~ 启动终端并进入到源码根目录，使用以下命令即可：
+
+```bash
+python3 ddcs.py
+```
+3. 替换 `app.asar`
+> [!NOTE]
+> Windows下默认为`C:\Program Files\Docker\Docker\frontend\resources`
+> 
+> MacOS下默认为`/Applications/Docker.app/Contents/MacOS/Docker Desktop.app/Contents/Resources`
+
+~~注意：请务必使用管理员权限启动终端。~~
 
 ## 更新历史
 2024.8.13 发布MAC版本
