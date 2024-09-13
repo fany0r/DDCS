@@ -11,21 +11,21 @@ import multiprocessing
 import os
 import shutil
 import sys
-import winreg
+import platform
 from concurrent.futures import ThreadPoolExecutor
 
 from common import log
 
 
-def run_as_admin():
-    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
+# def run_as_admin():
+#     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
 
 
-def is_admin():
-    try:
-        return ctypes.windll.shell32.IsUserAnAdmin()
-    except:
-        return False
+# def is_admin():
+#     try:
+#         return ctypes.windll.shell32.IsUserAnAdmin()
+#     except:
+#         return False
 
 
 class DDProcessor:
@@ -40,41 +40,53 @@ class DDProcessor:
         else:
             log.info('开始打包...')
             self.pack_asar()
-            log.info('正在替换文件...')
             self.cp_asar(self.get)
-            log.info('汉化完成')
+            log.info('汉化完成\n汉化后的app.asar保存在build_out目录下。\n稍后请手动替换到相应的位置。')
 
     @staticmethod
-    def get_install_path(name='Docker Desktop'):
+    def get_install_path():
+        os_name = platform.system()
         try:
-            reg_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
-                                     rf"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{name}")
-            install_path, _ = winreg.QueryValueEx(reg_key, "InstallLocation") # 获取安装路径
-            winreg.CloseKey(reg_key)
-            return install_path
+            if os_name == 'Windows':
+                install_path = r'C:\\Program Files\\Docker\\Docker'
+                return install_path
+            elif os_name == 'Darwin':
+                install_path = '/Applications/Docker.app/Contents/MacOS/Docker Desktop.app/Contents/Resources'
+                return install_path
         except FileNotFoundError:
             return None
 
     def cp_asar(self, get):
-        dest = os.path.join(os.getcwd(), 'app.asar.unpacked')
+        os_name = platform.system()
+        dest = os.path.join(os.getcwd(), 'temp/app.asar.unpacked')
+        temp = os.path.join(os.getcwd(), 'temp')
+
         try:
             if get:
                 if os.path.exists(dest):
                     shutil.rmtree(dest)
-                shutil.copytree(f'{self.docker_install_path}/frontend/resources/app.asar.unpacked', dest)
-                shutil.copy(f'{self.docker_install_path}/frontend/resources/app.asar', os.getcwd())
-                shutil.copy(f'{self.docker_install_path}/frontend/resources/app.asar',
-                            os.path.join(os.getcwd(), 'app-backup.asar'))
+                if os_name == 'Windows':
+                    shutil.copytree(f'{self.docker_install_path}/frontend/resources/app.asar.unpacked', dest)
+                    shutil.copy(f'{self.docker_install_path}/frontend/resources/app.asar', temp)
+                elif os_name == 'Darwin':
+                    shutil.copytree(f'{self.docker_install_path}/app.asar.unpacked', dest)
+                    shutil.copy(f'{self.docker_install_path}/app.asar', temp)
             else:
-                os.remove(f'{self.docker_install_path}/frontend/resources/app.asar')
-                shutil.copy(f'{os.getcwd()}/app.asar', f'{self.docker_install_path}/frontend/resources')
+                dest = os.path.join(os.getcwd(), 'build_out')
+                if os.path.exists(dest):
+                    shutil.rmtree(dest)
+                os.makedirs("build_out")
+                shutil.move(f'{os.getcwd()}/app.asar', f'{os.getcwd()}/build_out')
         except Exception as e:
             log.error(f"文件复制时出错: {str(e)}")
             sys.exit()
 
     @staticmethod
     def extract_asar():
-        flag = os.system('asar extract app.asar app')
+        dest = os.path.join(os.getcwd(), 'temp/app')
+        if os.path.exists(dest):
+            shutil.rmtree(dest)
+        flag = os.system('asar extract temp/app.asar temp/app')
         if flag == 1:
             log.error('执行解包命令出错，即将退出')
             sys.exit()
@@ -83,7 +95,10 @@ class DDProcessor:
 
     @staticmethod
     def pack_asar():
-        flag = os.system('asar pack app app.asar')
+        dest = os.path.join(os.getcwd(), 'temp/app.asar')
+        if os.path.exists(dest):
+            os.remove(dest)
+        flag = os.system('asar pack temp/app app.asar')
         if flag == 1:
             log.error('执行打包命令出错，即将退出')
             sys.exit()
