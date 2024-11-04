@@ -41,7 +41,8 @@ class DDProcessor:
             log.info('开始打包...')
             self.pack_asar()
             self.cp_asar(self.get)
-            log.info('汉化完成\n汉化后的app.asar保存在build_out目录下。\n稍后请手动替换到相应的位置。')
+            log.info('汉化完成，汉化后的 app.asar 已保存在 build_out 目录下~')
+            log.info('稍后请手动复制到相应的位置')
 
     @staticmethod
     def get_install_path():
@@ -86,7 +87,7 @@ class DDProcessor:
         dest = os.path.join(os.getcwd(), 'temp/app')
         if os.path.exists(dest):
             shutil.rmtree(dest)
-        flag = os.system('asar extract temp/app.asar temp/app')
+        flag = os.system('npx asar extract temp/app.asar temp/app')
         if flag == 1:
             log.error('执行解包命令出错，即将退出')
             sys.exit()
@@ -98,7 +99,7 @@ class DDProcessor:
         dest = os.path.join(os.getcwd(), 'temp/app.asar')
         if os.path.exists(dest):
             os.remove(dest)
-        flag = os.system('asar pack temp/app app.asar')
+        flag = os.system('npx asar pack temp/app app.asar')
         if flag == 1:
             log.error('执行打包命令出错，即将退出')
             sys.exit()
