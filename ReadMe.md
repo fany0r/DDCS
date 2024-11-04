@@ -12,13 +12,16 @@ DDCS，全称Docker Desktop Chinese Script，即Docker汉化脚本。
 ## 使用方法
 
 > [!NOTE]
-> 需要已安装 python3、Nodejs（asar）
+> 需要已安装 python3、Nodejs
 > 
 
 1. 关闭Docker Desktop
-2. 下载源码，启动终端并进入到源码根目录，执行以下命令即：
+2. 下载源码，执行以下命令：
 
 ```bash
+git clone https://github.com/fany0r/DDCS.git
+cd DDCS
+npm install
 python3 ddcs.py
 ```
 3. 替换 `app.asar`
