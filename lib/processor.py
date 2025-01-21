@@ -43,7 +43,6 @@ class DDProcessor:
             self.cp_asar(self.get)
             log.info('汉化完成，汉化后的 app.asar 已保存在 build_out 目录下~')
             log.info('稍后请手动复制到相应的位置')
-
     @staticmethod
     def get_install_path():
         os_name = platform.system()
@@ -59,13 +58,14 @@ class DDProcessor:
 
     def cp_asar(self, get):
         os_name = platform.system()
-        dest = os.path.join(os.getcwd(), 'temp/app.asar.unpacked')
-        temp = os.path.join(os.getcwd(), 'temp')
-
+        script_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
+        dest = os.path.join(script_dir, 'temp/app.asar.unpacked')
+        temp = os.path.join(script_dir, 'temp')
         try:
             if get:
                 if os.path.exists(dest):
                     shutil.rmtree(dest)
+                os.makedirs(temp, exist_ok=True)
                 if os_name == 'Windows':
                     shutil.copytree(f'{self.docker_install_path}/frontend/resources/app.asar.unpacked', dest)
                     shutil.copy(f'{self.docker_install_path}/frontend/resources/app.asar', temp)
@@ -73,11 +73,11 @@ class DDProcessor:
                     shutil.copytree(f'{self.docker_install_path}/app.asar.unpacked', dest)
                     shutil.copy(f'{self.docker_install_path}/app.asar', temp)
             else:
-                dest = os.path.join(os.getcwd(), 'build_out')
-                if os.path.exists(dest):
-                    shutil.rmtree(dest)
-                os.makedirs("build_out")
-                shutil.move(f'{os.getcwd()}/app.asar', f'{os.getcwd()}/build_out')
+                bout = "build_out"
+                if os.path.exists(bout):
+                    shutil.rmtree(bout)
+                os.makedirs("build_out", exist_ok=True)
+                shutil.move(f'{script_dir}/app.asar', f'{script_dir}/{bout}')
         except Exception as e:
             log.error(f"文件复制时出错: {str(e)}")
             sys.exit()
