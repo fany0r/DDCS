@@ -173,6 +173,18 @@
       "dest": "\"资源利用\""
     },
     {
+      "src": "description:\"View all your running containers and applications.\"",
+      "dest": "description:\"查看所有正在运行的容器和应用程序。\""
+    },
+    {
+      "src": "description:\"View and manage your local and Docker Hub images.\"",
+      "dest": "description:\"查看并管理本地及 Docker Hub 的镜像。\""
+    },
+    {
+      "src": "description:\"Manage your volumes, view usage, and inspect their contents.\"",
+      "dest": "description:\"管理你的卷，查看使用情况，并检查其内容。\""
+    },
+    {
       "src": "description:\"A container is an isolated environment for your code\"",
       "dest": "description:\"容器是代码的隔离环境\""
     },
@@ -549,6 +561,10 @@
       "dest": "通过键入 json Docker 守护程序配置文件来配置 Docker 守护程序"
     },
     {
+      "src": "children:\"This can prevent Docker from starting, reset your daemon settings if it hangs.\"",
+      "dest": "children:\"这可能会阻止 Docker 启动，如果守护进程卡住，请重置守护进程设置。\""
+    },
+    {
       "src": "children:\"This can prevent Docker from starting. Use at your own risk.\"",
       "dest": "children:\"这可能会阻止 Docker 启动。使用风险自负。\""
     },
@@ -713,6 +729,14 @@
       "dest": "\"故障排除\""
     },
     {
+      "src": "\"Cannot switch to old mode now.\"",
+      "dest": "\"无法切换到旧模式。\""
+    },
+    {
+      "src": "label:`Switch to ${t} containers...`",
+      "dest": "label:`切换到 ${t} 容器...`"
+    },
+    {
       "src": "label:\"About Docker Desktop\"",
       "dest": "label:\"关于 Docker Desktop\""
     },
@@ -835,6 +859,14 @@
     {
       "src": "Running in Resource Saver mode",
       "dest": "节能模式正在运行"
+    },
+    {
+      "src": "Docker Desktop running",
+      "dest": "正在运行"
+    },
+    {
+      "src": "Docker Desktop is running",
+      "dest": "正在运行"
     },
     {
       "src": "Docker Desktop failed to start",
